@@ -1,0 +1,11 @@
+{
+  "name": "script-redirect",
+  "version": "1.0.0",
+  "main": "skrippt.js",
+  "scripts": {
+    "start": "node skrippt.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

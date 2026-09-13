@@ -140,8 +140,9 @@
   }
 
   .links-row{
-    display:grid;
-    grid-template-columns:repeat(3, 1fr);
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
     gap:12px;
   }
 
@@ -150,6 +151,7 @@
     flex-direction:column;
     align-items:center;
     gap:8px;
+    flex:0 1 calc((100% - 24px) / 3);
     padding:14px 6px 12px;
     border-radius:var(--radius-sm);
     background:rgba(255,255,255,.03);
@@ -181,6 +183,7 @@
   @media (max-width:380px){
     .profile-card{ padding:30px 18px 24px; }
     .links-row{ gap:9px; }
+    .link-btn{ flex-basis: calc((100% - 18px) / 3); }
   }
 </style>
 </head>
@@ -227,11 +230,6 @@
           <span class="icon"><svg viewBox="0 0 24 24"><path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658a3.387 3.387 0 011.912-.59c.063 0 .125.004.188.006l2.861-4.142V8.91a4.528 4.528 0 014.524-4.524c2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159a3.392 3.392 0 01-3.39 3.396 3.412 3.412 0 01-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25a2.551 2.551 0 003.337-3.324 2.547 2.547 0 00-3.255-1.413l1.523.63a1.878 1.878 0 01-1.445 3.467H7.54zm11.415-9.303a3.019 3.019 0 00-3.015-3.015 3.015 3.015 0 103.015 3.015zm-5.273-.005a2.264 2.264 0 114.531 0 2.267 2.267 0 01-2.266 2.265 2.264 2.264 0 01-2.265-2.265z"/></svg></span>
           <span class="label">Steam</span>
         </a>
-
-        <a class="link-btn" id="link-projectreal" target="_blank" rel="noopener noreferrer">
-          <span class="icon"><img id="projectRealImg" src="" alt="Project Real"></span>
-          <span class="label">Project Real</span>
-        </a>
       </nav>
     </main>
   </div>
@@ -241,28 +239,22 @@
      ЗАПОЛНИ ЭТИ ПЕРЕМЕННЫЕ СВОИМИ ДАННЫМИ
      ============================================================ */
   const CONFIG = {
-    backgroundImage: "https://github.com/user-attachments/assets/57b0deb5-29eb-4edb-bb8b-dae8d5576f9c",   // ссылка на картинку фона, например "https://i.imgur.com/xxxx.jpg"
+    backgroundImage: "https://ibb.co/qH5tBjT",   // ссылка на картинку фона, например "https://i.imgur.com/xxxx.jpg"
 
     // ID трека Spotify — бери его из ссылки на встраивание:
     // https://open.spotify.com/embed/track/ЭТОТ_КУСОК?utm_source=...
     spotifyTrackId: "3UXhoCvMithO5QWrx0sNle",
 
-    avatarUrl: "https://github.com/user-attachments/assets/e296240a-51c2-426b-a238-e0c2dc190ddd",         // ссылка на твою аватарку (например, из Discord)
+    avatarUrl: "https://ibb.co/pvNKwhzz",         // ссылка на твою аватарку (например, из Discord)
     displayName: "Cucumber",
     tagline: "HI",
-
-    // если картинка Project Real не показывается (сайт-источник блокирует
-    // хотлинк с чужих страниц) — скачай логотип к себе и укажи здесь
-    // ссылку на свою копию, или оставь как есть: тогда покажутся буквы "PR"
-    projectRealLogo: "https://cdn.weao.gg/slug/real/logo.png",
 
     links: {
       discord: "https://discord.com/users/1499474505943486489",
       roblox: "https://www.roblox.com/users/4110423563/profile",
       tiktok: "https://www.tiktok.com/@cucumber_2347",
       github: "https://github.com/delivery-2347",
-      steam: "https://steamcommunity.com/id/cucumber_2347",
-      projectReal: "#"
+      steam: "https://steamcommunity.com/id/cucumber_2347"
     }
   };
 
@@ -277,16 +269,6 @@
   document.getElementById("link-tiktok").href = CONFIG.links.tiktok;
   document.getElementById("link-github").href = CONFIG.links.github;
   document.getElementById("link-steam").href = CONFIG.links.steam;
-  document.getElementById("link-projectreal").href = CONFIG.links.projectReal;
-
-  // картинка Project Real — если не загрузится (хотлинк-защита источника),
-  // покажем текстовую заглушку вместо сломанной иконки
-  const prImg = document.getElementById("projectRealImg");
-  prImg.src = CONFIG.projectRealLogo;
-  prImg.onerror = () => {
-    const span = prImg.parentElement;
-    span.innerHTML = '<span style="font-family:Sora, sans-serif; font-weight:600; font-size:12px;">PR</span>';
-  };
 
   // --- Spotify-виджет ---
   if (CONFIG.spotifyTrackId) {

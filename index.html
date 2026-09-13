@@ -303,7 +303,10 @@
     for (let i = n - 1; i >= 1; i--) seq.push(i);  // вниз: n-1..1 (без повтора концов)
     let idx = 0;
     setInterval(() => {
-      document.title = fullName.slice(0, seq[idx]);
+      const shown = fullName.slice(0, seq[idx]);
+      // пустую строку браузер заменяет адресом сайта во вкладке,
+      // поэтому вместо "" ставим невидимый символ — снаружи выглядит так же пусто
+      document.title = shown.length ? shown : "\u200B";
       idx = (idx + 1) % seq.length;
     }, CONFIG.tabBlink.intervalMs || 250);
   }

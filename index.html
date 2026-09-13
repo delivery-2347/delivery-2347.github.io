@@ -249,6 +249,13 @@
     displayName: "Cucumber",
     tagline: "HI",
 
+    // иконка вкладки браузера (favicon)
+    faviconUrl: "https://i.ibb.co/twngNkVM/Roblox-Screen-Shot20260812-040642324.png",
+
+    // мигание названия вкладки: true/false — включить/выключить,
+    // ms — с какой скоростью чередуется имя / пусто
+    tabBlink: { enabled: true, intervalMs: 900 },
+
     links: {
       discord: "https://discord.com/users/1499474505943486489",
       roblox: "https://www.roblox.com/users/4110423563/profile",
@@ -274,6 +281,27 @@
   if (CONFIG.spotifyTrackId) {
     document.getElementById("spotifyEmbed").src =
       `https://open.spotify.com/embed/track/${CONFIG.spotifyTrackId}?utm_source=generator&theme=0`;
+  }
+
+  // --- иконка вкладки (favicon) ---
+  if (CONFIG.faviconUrl) {
+    let iconLink = document.querySelector("link[rel~='icon']");
+    if (!iconLink) {
+      iconLink = document.createElement("link");
+      iconLink.rel = "icon";
+      document.head.appendChild(iconLink);
+    }
+    iconLink.href = CONFIG.faviconUrl;
+  }
+
+  // --- мигающее название вкладки: имя <-> пусто ---
+  if (CONFIG.tabBlink && CONFIG.tabBlink.enabled && CONFIG.displayName) {
+    let nameShown = true;
+    document.title = CONFIG.displayName;
+    setInterval(() => {
+      nameShown = !nameShown;
+      document.title = nameShown ? CONFIG.displayName : "";
+    }, CONFIG.tabBlink.intervalMs || 900);
   }
 </script>
 

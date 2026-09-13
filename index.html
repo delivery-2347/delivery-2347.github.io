@@ -252,9 +252,9 @@
     // иконка вкладки браузера (favicon)
     faviconUrl: "https://i.ibb.co/twngNkVM/Roblox-Screen-Shot20260812-040642324.png",
 
-    // мигание названия вкладки: true/false — включить/выключить,
-    // ms — с какой скоростью чередуется имя / пусто
-    tabBlink: { enabled: true, intervalMs: 900 },
+    // печать названия вкладки по буквам: true/false — включить/выключить,
+    // ms — задержка между буквами
+    tabBlink: { enabled: true, intervalMs: 250 },
 
     links: {
       discord: "https://discord.com/users/1499474505943486489",
@@ -294,14 +294,14 @@
     iconLink.href = CONFIG.faviconUrl;
   }
 
-  // --- мигающее название вкладки: имя <-> пусто ---
+  // --- название вкладки печатается по буквам: '' → c → cu → ... → cucumber → снова '' ---
   if (CONFIG.tabBlink && CONFIG.tabBlink.enabled && CONFIG.displayName) {
-    let nameShown = true;
-    document.title = CONFIG.displayName;
+    const fullName = CONFIG.displayName;
+    let pos = 0;
     setInterval(() => {
-      nameShown = !nameShown;
-      document.title = nameShown ? CONFIG.displayName : "";
-    }, CONFIG.tabBlink.intervalMs || 900);
+      document.title = fullName.slice(0, pos);
+      pos = (pos + 1) % (fullName.length + 1);
+    }, CONFIG.tabBlink.intervalMs || 250);
   }
 </script>
 

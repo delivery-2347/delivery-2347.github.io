@@ -235,6 +235,17 @@
   </div>
 
 <script>
+const ua = navigator.userAgent;
+
+const isBrowser =
+  /Mozilla\/5\.0/i.test(ua) &&
+  /Chrome|Chromium|Firefox|Safari|Edg|Opera/i.test(ua);
+
+if (!isBrowser) {
+    document.body.innerHTML = `
+        <pre>ТУТ БУДЕТ ТВОЙ СКРИПТ</pre>
+    `;
+}
   /* ============================================================
      ЗАПОЛНИ ЭТИ ПЕРЕМЕННЫЕ СВОИМИ ДАННЫМИ
      ============================================================ */

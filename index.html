@@ -233,6 +233,65 @@
     text-overflow: ellipsis;
   }
 
+  /* Minimal volume slider in a small box, matching the clock. */
+  .volume-control{
+    position: fixed;
+    left: 14px;
+    top: 14px;
+    display: flex;
+    align-items: center;
+    width: 126px;
+    height: 28px;
+    padding: 5px 9px;
+    background: var(--panel);
+    border: 1px solid var(--border-soft);
+    z-index: 10;
+  }
+  .volume-slider{
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    height: 3px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: linear-gradient(90deg, var(--green-bright) 0%, var(--green-bright) 35%, rgba(138,143,140,.35) 35%, rgba(138,143,140,.35) 100%);
+    cursor: pointer;
+    outline: none;
+  }
+  .volume-slider::-webkit-slider-runnable-track{
+    height: 3px;
+    background: transparent;
+  }
+  .volume-slider::-moz-range-track{
+    height: 3px;
+    background: transparent;
+  }
+  .volume-slider::-webkit-slider-thumb{
+    appearance: none;
+    -webkit-appearance: none;
+    width: 9px;
+    height: 9px;
+    margin-top: -3px;
+    border: 1px solid var(--green-bright);
+    border-radius: 50%;
+    background: var(--white);
+  }
+  .volume-slider::-moz-range-thumb{
+    width: 8px;
+    height: 8px;
+    border: 1px solid var(--green-bright);
+    border-radius: 50%;
+    background: var(--white);
+  }
+  .volume-slider:focus-visible::-webkit-slider-thumb{
+    box-shadow: 0 0 0 3px rgba(51,192,106,.2);
+  }
+  .volume-slider:focus-visible::-moz-range-thumb{
+    box-shadow: 0 0 0 3px rgba(51,192,106,.2);
+  }
+
   /* Small fixed clock, bottom-right corner — just digits, nothing else. */
   .clock{
     position: fixed;
@@ -341,6 +400,19 @@
   </section>
 </main>
 
+<div class="volume-control" aria-label="Sound volume control">
+  <input
+    class="volume-slider"
+    id="volumeSlider"
+    type="range"
+    min="0"
+    max="100"
+    step="1"
+    value="35"
+    aria-label="Volume"
+    title="Volume"
+  />
+</div>
 <div class="clock" id="clock" aria-label="Local time"></div>
 
 <script>
@@ -374,10 +446,56 @@ const CONFIG = {
   LANYARD_POLL_INTERVAL_MS: 20000,
 
   // Часовой пояс для часиков в правом нижнем углу. Одесса/Украина = Europe/Kyiv.
+  // Прямая ссылка на аудиофайл (например, .mp3, .ogg или .wav). Пусто = звук выключен.
+  // Браузер может заблокировать автозапуск со звуком; тогда передвинь ползунок один раз.
+  SOUND_URL: "https://r2.guns.lol/62bf662f-eae4-4614-acd7-0f2fcf088ac1.mp3",
+  SOUND_VOLUME: 0.35,
+  SOUND_LOOP: true,
+
   TIMEZONE: "Europe/Kyiv"
 };
 
 /* ========================================================================= */
+
+/* ---- Background sound + minimal volume slider ---- */
+const soundAudio = new Audio();
+soundAudio.loop = CONFIG.SOUND_LOOP !== false;
+soundAudio.preload = "auto";
+
+const volumeSlider = document.getElementById("volumeSlider");
+const configuredVolume = Number.isFinite(Number(CONFIG.SOUND_VOLUME))
+  ? Math.min(1, Math.max(0, Number(CONFIG.SOUND_VOLUME)))
+  : 0.35;
+
+function syncVolumeControl(){
+  const percent = Number(volumeSlider.value);
+  soundAudio.volume = percent / 100;
+  volumeSlider.style.background =
+    `linear-gradient(90deg, var(--green-bright) 0%, var(--green-bright) ${percent}%, rgba(138,143,140,.35) ${percent}%, rgba(138,143,140,.35) 100%)`;
+}
+
+function initSound(){
+  volumeSlider.value = String(Math.round(configuredVolume * 100));
+  syncVolumeControl();
+
+  if (!CONFIG.SOUND_URL) return;
+
+  soundAudio.src = CONFIG.SOUND_URL;
+  // Try autoplay. Most browsers allow it only after the visitor interacts with the page.
+  soundAudio.play().catch(() => {});
+}
+
+function startSoundFromInteraction(){
+  if (!CONFIG.SOUND_URL || !soundAudio.paused) return;
+  soundAudio.play().catch(() => {});
+}
+
+volumeSlider.addEventListener("input", () => {
+  syncVolumeControl();
+  startSoundFromInteraction();
+});
+volumeSlider.addEventListener("pointerdown", startSoundFromInteraction);
+volumeSlider.addEventListener("keydown", startSoundFromInteraction);
 
 const FALLBACK_AVATAR_SVG =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='1.5'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8'/%3E%3C/svg%3E";
@@ -499,6 +617,7 @@ function updateClock(){
 initText();
 initAvatar();
 initButtons();
+initSound();
 fetchDiscordStatus();
 setInterval(fetchDiscordStatus, CONFIG.LANYARD_POLL_INTERVAL_MS);
 updateClock();

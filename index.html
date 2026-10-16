@@ -4,9 +4,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>
-      CUCUMBER
-    </title>
+    <link
+      rel="icon"
+      type="image/webp"
+      href="https://r2.guns.lol/f280cc4c-c902-4393-8dc8-91c2d624a068.webp"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="https://r2.guns.lol/f280cc4c-c902-4393-8dc8-91c2d624a068.webp"
+    />
+    <title>Cucumber</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;1,600;1,700&display=swap" rel="stylesheet">
@@ -619,8 +626,35 @@
         titleLink.referrerPolicy = "strict-origin-when-cross-origin";
 
         document.getElementById("description").textContent = CONFIG.DESCRIPTION;
-        document.title = CONFIG.USERNAME;
+
       }
+      // Browser tab title animation: type the name, pause, erase, and repeat.
+      const animatedTabTitle = "Cucumber";
+      let tabTitleLength = 0;
+      let tabTitleDeleting = false;
+
+      function animateTabTitle() {
+        document.title = animatedTabTitle.slice(0, tabTitleLength);
+
+        let nextDelay = 150;
+
+        if (!tabTitleDeleting && tabTitleLength < animatedTabTitle.length) {
+          tabTitleLength += 1;
+          nextDelay = 150;
+        } else if (!tabTitleDeleting) {
+          tabTitleDeleting = true;
+          nextDelay = 1100;
+        } else if (tabTitleLength > 0) {
+          tabTitleLength -= 1;
+          nextDelay = 90;
+        } else {
+          tabTitleDeleting = false;
+          nextDelay = 450;
+        }
+
+        window.setTimeout(animateTabTitle, nextDelay);
+      }
+
       function initAvatar() {
         const img = document.getElementById("avatar");
         if (CONFIG.AVATAR_URL) {
@@ -745,6 +779,7 @@
         }
       }
       safelyInitialize("text", initText);
+      safelyInitialize("tab title animation", animateTabTitle);
       safelyInitialize("avatar", initAvatar);
       safelyInitialize("social buttons", initButtons);
       safelyInitialize("sound", initSound);

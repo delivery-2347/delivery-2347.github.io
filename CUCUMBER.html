@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" class="gate-pending">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <title>Protected site</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --background: #080808;
+        --green: #33c06a;
+        --text: #f2f2f2;
+        --muted: #8a8f8c;
+        --border: rgba(70, 150, 100, .35);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        min-height: 100%;
+        margin: 0;
+        background: var(--background);
+        color: var(--text);
+        font-family: Arial, sans-serif;
+      }
+
+      html.gate-pending body {
+        visibility: hidden;
+      }
+
+      .screen {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        text-align: center;
+      }
+
+      .message {
+        max-width: 520px;
+      }
+
+      h1 {
+        margin: 0 0 12px;
+        color: var(--green);
+        font-size: clamp(24px, 4vw, 36px);
+      }
+
+      p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      a {
+        color: var(--green);
+      }
+
+      #protectedContent[hidden],
+      #accessDenied[hidden] {
+        display: none !important;
+      }
+    </style>
+
+    <script>
+      // The origin of your CUCUMBER profile site.
+      const ORIGINAL_SITE_ORIGIN = "https://delivery-2347.github.io";
+
+      // This is a basic navigation check, not strong authentication.
+      // The destination must be opened by clicking CUCUMBER on the original site.
+      function cameFromCucumberSite() {
+        const params = new URLSearchParams(window.location.search);
+        const hasFlowMarker = params.get("via") === "cucumber";
+
+        let referrerOrigin = "";
+
+        try {
+          if (document.referrer) {
+            referrerOrigin = new URL(document.referrer).origin;
+          }
+        } catch (error) {
+          referrerOrigin = "";
+        }
+
+        return hasFlowMarker && referrerOrigin === ORIGINAL_SITE_ORIGIN;
+      }
+
+      const allowedEntry = cameFromCucumberSite();
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const protectedContent = document.getElementById("protectedContent");
+        const accessDenied = document.getElementById("accessDenied");
+
+        protectedContent.hidden = !allowedEntry;
+        accessDenied.hidden = allowedEntry;
+        document.documentElement.classList.remove("gate-pending");
+      });
+    </script>
+  </head>
+
+  <body>
+    <section id="accessDenied" class="screen" hidden>
+      <div class="message">
+        <h1>Access denied</h1>
+        <p>
+          Open this site by clicking <strong>CUCUMBER</strong> on the original profile page.
+          A direct link will not pass this check.
+        </p>
+      </div>
+    </section>
+
+    <main id="protectedContent" hidden>
+      <!--
+        Put the content of your OTHER site inside this <main> element.
+        Keep its existing styles and scripts when you move the page content here.
+      -->
+      <section class="screen">
+        <div class="message">
+          <h1>Your site goes here</h1>
+          <p>
+            Replace this example with the existing content of your destination website.
+          </p>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

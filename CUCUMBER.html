@@ -4,7 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <title>Protected site</title>
+
+    <link
+      rel="icon"
+      type="image/webp"
+      href="https://r2.guns.lol/f280cc4c-c902-4393-8dc8-91c2d624a068.webp"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="https://r2.guns.lol/f280cc4c-c902-4393-8dc8-91c2d624a068.webp"
+    />
+    <title>Cucumber</title>
+
     <style>
       :root {
         color-scheme: dark;
@@ -65,14 +76,18 @@
       #accessDenied[hidden] {
         display: none !important;
       }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+        }
+      }
     </style>
 
     <script>
-      // The origin of your CUCUMBER profile site.
-      const ORIGINAL_SITE_ORIGIN = "https://delivery-2347.github.io/";
+      // Must match the original profile site's origin. URL.origin has no trailing slash.
+      const ORIGINAL_SITE_ORIGIN = "https://delivery-2347.github.io";
 
-      // This is a basic navigation check, not strong authentication.
-      // The destination must be opened by clicking CUCUMBER on the original site.
       function cameFromCucumberSite() {
         const params = new URLSearchParams(window.location.search);
         const hasFlowMarker = params.get("via") === "cucumber";
@@ -96,29 +111,62 @@
         const protectedContent = document.getElementById("protectedContent");
         const accessDenied = document.getElementById("accessDenied");
 
+        // Protect against a typo in the element IDs leaving the entire page invisible.
+        if (!protectedContent || !accessDenied) {
+          console.error("CUCUMBER gate elements are missing.");
+          document.documentElement.classList.remove("gate-pending");
+          return;
+        }
+
         protectedContent.hidden = !allowedEntry;
         accessDenied.hidden = allowedEntry;
         document.documentElement.classList.remove("gate-pending");
       });
+
+      // Type "Cucumber", pause, erase it, and repeat in the browser tab.
+      const animatedTabTitle = "Cucumber";
+      let tabTitleLength = 0;
+      let tabTitleDeleting = false;
+
+      function animateTabTitle() {
+        document.title = animatedTabTitle.slice(0, tabTitleLength);
+
+        let nextDelay = 150;
+
+        if (!tabTitleDeleting && tabTitleLength < animatedTabTitle.length) {
+          tabTitleLength += 1;
+          nextDelay = 150;
+        } else if (!tabTitleDeleting) {
+          tabTitleDeleting = true;
+          nextDelay = 1100;
+        } else if (tabTitleLength > 0) {
+          tabTitleLength -= 1;
+          nextDelay = 90;
+        } else {
+          tabTitleDeleting = false;
+          nextDelay = 450;
+        }
+
+        window.setTimeout(animateTabTitle, nextDelay);
+      }
+
+      animateTabTitle();
     </script>
   </head>
 
   <body>
-    <section id="LOL" class="screen" hidden>
+    <section id="accessDenied" class="screen" hidden>
       <div class="message">
         <h1>Access denied</h1>
         <p>
-          Open this site by clicking <strong>???</strong> on the original profile page.
+          Open this site by clicking <strong>CUCUMBER</strong> on the original profile page.
           A direct link will not pass this check.
         </p>
       </div>
     </section>
 
-    <main id="CUCUMBER" hidden>
-      <!--
-        Put the content of your OTHER site inside this <main> element.
-        Keep its existing styles and scripts when you move the page content here.
-      -->
+    <main id="protectedContent" hidden>
+      <!-- Keep your destination page's actual content inside this element. -->
       <section class="screen">
         <div class="message">
           <h1>LOL</h1>

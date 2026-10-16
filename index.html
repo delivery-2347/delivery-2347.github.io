@@ -58,6 +58,8 @@
         margin: 0 auto;
       }
       .title {
+        text-decoration: none;
+        cursor: pointer;
         position: absolute;
         left: 37.602%;
         top: 10.402%;
@@ -426,8 +428,13 @@
     </div>
     <main class="gui-frame" aria-label="Profile">
       <img class="avatar" id="avatar" alt="Avatar" />
-      <h1 class="title" id="title">
-      </h1>
+      <a
+        class="title"
+        id="title"
+        href="#"
+        aria-label="CUCUMBER"
+        referrerpolicy="strict-origin-when-cross-origin"
+      ></a>
       <p class="description" id="description">
       </p>
       <nav class="buttons-row" aria-label="Social links">
@@ -483,6 +490,10 @@
       const CONFIG = {
         USERNAME: "CUCUMBER",
         DESCRIPTION: "HI",
+
+        // Сайт, который откроется после нажатия на CUCUMBER.
+        CUCUMBER_URL: "https://delivery-2347.github.io/CUCUMBER.html",
+
         AVATAR_URL: "https://r2.guns.lol/f280cc4c-c902-4393-8dc8-91c2d624a068.webp",
         TELEGRAM_URL: "https://t.me/cucumber_2347",
         DISCORD_URL: "https://discord.com/users/1499474505943486489",
@@ -586,8 +597,27 @@
 
       const FALLBACK_AVATAR_SVG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='1.5'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8'/%3E%3C/svg%3E";
 
+      function createCucumberDestinationUrl() {
+        if (!CONFIG.CUCUMBER_URL) {
+          return "#";
+        }
+
+        try {
+          const destination = new URL(CONFIG.CUCUMBER_URL, window.location.href);
+          destination.searchParams.set("via", "cucumber");
+          return destination.href;
+        } catch (error) {
+          console.error("Invalid CONFIG.CUCUMBER_URL:", error);
+          return "#";
+        }
+      }
+
       function initText() {
-        document.getElementById("title").textContent = CONFIG.USERNAME;
+        const titleLink = document.getElementById("title");
+        titleLink.textContent = CONFIG.USERNAME;
+        titleLink.href = createCucumberDestinationUrl();
+        titleLink.referrerPolicy = "strict-origin-when-cross-origin";
+
         document.getElementById("description").textContent = CONFIG.DESCRIPTION;
         document.title = CONFIG.USERNAME;
       }

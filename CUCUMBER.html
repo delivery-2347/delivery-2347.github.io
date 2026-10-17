@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" class="gate-pending">
   <head>
@@ -14,6 +15,7 @@
       rel="apple-touch-icon"
       href="https://r2.guns.lol/f280cc4c-c902-4393-8dc8-91c2d624a068.webp"
     />
+
     <title>Cucumber</title>
 
     <style>
@@ -53,6 +55,7 @@
       }
 
       .message {
+        width: 100%;
         max-width: 520px;
       }
 
@@ -72,6 +75,17 @@
         color: var(--green);
       }
 
+      .media-video {
+        display: block;
+        width: 100%;
+        max-width: 520px;
+        max-height: 70vh;
+        margin: 0 auto;
+        object-fit: contain;
+        background: #000;
+        border-radius: 8px;
+      }
+
       #protectedContent[hidden],
       #accessDenied[hidden] {
         display: none !important;
@@ -85,7 +99,7 @@
     </style>
 
     <script>
-      // Must match the original profile site's origin. URL.origin has no trailing slash.
+      // Must match the original profile site's origin.
       const ORIGINAL_SITE_ORIGIN = "https://delivery-2347.github.io";
 
       function cameFromCucumberSite() {
@@ -111,7 +125,6 @@
         const protectedContent = document.getElementById("protectedContent");
         const accessDenied = document.getElementById("accessDenied");
 
-        // Protect against a typo in the element IDs leaving the entire page invisible.
         if (!protectedContent || !accessDenied) {
           console.error("CUCUMBER gate elements are missing.");
           document.documentElement.classList.remove("gate-pending");
@@ -123,13 +136,16 @@
         document.documentElement.classList.remove("gate-pending");
       });
 
-      // Type "Cucumber", pause, erase it, and repeat in the browser tab.
+      // Animate the browser tab title.
       const animatedTabTitle = "Cucumber";
       let tabTitleLength = 0;
       let tabTitleDeleting = false;
 
       function animateTabTitle() {
-        document.title = tabTitleLength === 0 ? "\u200B" : animatedTabTitle.slice(0, tabTitleLength); 
+        document.title =
+          tabTitleLength === 0
+            ? "\u200B"
+            : animatedTabTitle.slice(0, tabTitleLength);
 
         let nextDelay = 150;
 
@@ -166,13 +182,22 @@
     </section>
 
     <main id="protectedContent" hidden>
-      <!-- Keep your destination page's actual content inside this element. -->
       <section class="screen">
         <div class="message">
           <h1>LOL</h1>
-          <p>
-            TUT NEHUYA NETU IDI NAHUI LOLLLL
-          </p>
+
+          <video
+            class="media-video"
+            autoplay
+            muted
+            loop
+            playsinline
+            disablepictureinpicture
+            preload="auto"
+          >
+            <source src="KOGDA.mp4" type="KOGDA/mp4" />
+            Your browser does not support HTML video.
+          </video>
         </div>
       </section>
     </main>

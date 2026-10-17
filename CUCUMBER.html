@@ -129,7 +129,7 @@
       let tabTitleDeleting = false;
 
       function animateTabTitle() {
-        document.title = animatedTabTitle.slice(0, tabTitleLength);
+        document.title = tabTitleLength === 0 ? "\u200B" : animatedTabTitle.slice(0, tabTitleLength); 
 
         let nextDelay = 150;
 

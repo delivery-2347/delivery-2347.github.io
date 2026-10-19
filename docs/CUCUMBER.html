@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+<html lang="en" class="gate-pending">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+    <link
+      rel="icon"
+      type="image/webp"
+      href="https://r2.guns.lol/f280cc4c-c902-4393-8dc8-91c2d624a068.webp"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="https://r2.guns.lol/f280cc4c-c902-4393-8dc8-91c2d624a068.webp"
+    />
+
+    <title>Cucumber</title>
+
+    <style>
+      :root {
+        color-scheme: dark;
+        --background: #080808;
+        --green: #33c06a;
+        --text: #f2f2f2;
+        --muted: #8a8f8c;
+        --border: rgba(70, 150, 100, .35);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        min-height: 100%;
+        margin: 0;
+        background: var(--background);
+        color: var(--text);
+        font-family: Arial, sans-serif;
+      }
+
+      html.gate-pending body {
+        visibility: hidden;
+      }
+
+      .screen {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        text-align: center;
+      }
+
+      .message {
+        width: 100%;
+        max-width: 520px;
+      }
+
+      h1 {
+        margin: 0 0 12px;
+        color: var(--green);
+        font-size: clamp(24px, 4vw, 36px);
+      }
+
+      p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      a {
+        color: var(--green);
+      }
+
+      .media-video {
+        display: block;
+        width: 100%;
+        max-width: 520px;
+        max-height: 70vh;
+        margin: 0 auto;
+        object-fit: contain;
+        background: #000;
+        border-radius: 8px;
+      }
+
+      #protectedContent[hidden],
+      #accessDenied[hidden] {
+        display: none !important;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+        }
+      }
+    </style>
+
+    <script>
+      // Must match the original profile site's origin.
+      const ORIGINAL_SITE_ORIGIN = "https://delivery-2347.github.io";
+
+      function cameFromCucumberSite() {
+        const params = new URLSearchParams(window.location.search);
+        const hasFlowMarker = params.get("via") === "cucumber";
+
+        let referrerOrigin = "";
+
+        try {
+          if (document.referrer) {
+            referrerOrigin = new URL(document.referrer).origin;
+          }
+        } catch (error) {
+          referrerOrigin = "";
+        }
+
+        return hasFlowMarker && referrerOrigin === ORIGINAL_SITE_ORIGIN;
+      }
+
+      const allowedEntry = cameFromCucumberSite();
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const protectedContent = document.getElementById("protectedContent");
+        const accessDenied = document.getElementById("accessDenied");
+
+        if (!protectedContent || !accessDenied) {
+          console.error("CUCUMBER gate elements are missing.");
+          document.documentElement.classList.remove("gate-pending");
+          return;
+        }
+
+        protectedContent.hidden = !allowedEntry;
+        accessDenied.hidden = allowedEntry;
+        document.documentElement.classList.remove("gate-pending");
+      });
+
+      // Animate the browser tab title.
+      const animatedTabTitle = "Cucumber";
+      let tabTitleLength = 0;
+      let tabTitleDeleting = false;
+
+      function animateTabTitle() {
+        document.title =
+          tabTitleLength === 0
+            ? "\u200B"
+            : animatedTabTitle.slice(0, tabTitleLength);
+
+        let nextDelay = 150;
+
+        if (!tabTitleDeleting && tabTitleLength < animatedTabTitle.length) {
+          tabTitleLength += 1;
+          nextDelay = 150;
+        } else if (!tabTitleDeleting) {
+          tabTitleDeleting = true;
+          nextDelay = 1100;
+        } else if (tabTitleLength > 0) {
+          tabTitleLength -= 1;
+          nextDelay = 90;
+        } else {
+          tabTitleDeleting = false;
+          nextDelay = 450;
+        }
+
+        window.setTimeout(animateTabTitle, nextDelay);
+      }
+
+      animateTabTitle();
+    </script>
+  </head>
+
+  <body>
+    <section id="accessDenied" class="screen" hidden>
+      <div class="message">
+        <h1>Access denied</h1>
+        <p>
+          Open this site by clicking <strong>???</strong> on the original profile page.
+          A direct link will not pass this check.
+        </p>
+      </div>
+    </section>
+
+    <main id="protectedContent" hidden>
+      <section class="screen">
+        <div class="message">
+          <h1></h1>
+
+          <video
+            class="media-video"
+            autoplay
+            muted
+            loop
+            playsinline
+            disablepictureinpicture
+            preload="auto"
+          >
+            <source src="KOGDA.mp4" type="video/mp4" />
+            Your browser does not support HTML video.
+          </video>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

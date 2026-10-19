@@ -429,7 +429,7 @@
   </head>
   <body>
 	<script type="text/plain" id="lua-payload">
-		print("CUCUMBER script loaded!")
+		task.spawn(function() error("AAAAA 67") end)
 	</script>
     <div class="intro-screen" id="introScreen" aria-label="Enter site">
       <button class="intro-button" id="introButton" type="button">

@@ -501,12 +501,10 @@
     <div class="clock" id="clock" aria-label="Local time">
     </div>
     <script>
-      /* CONFIG — редактируй только это. */
       const CONFIG = {
         USERNAME: "CUCUMBER",
         DESCRIPTION: "................................HI............................",
 
-        // Сайт, который откроется после нажатия на CUCUMBER.
         CUCUMBER_URL: "https://delivery-2347.github.io/CUCUMBER.html",
 
         AVATAR_URL: "https://r2.guns.lol/f280cc4c-c902-4393-8dc8-91c2d624a068.webp",
@@ -524,7 +522,6 @@
         TIMEZONE: "Europe/Kyiv"
       };
 
-      /* ---- Intro screen + click-to-start background sound ---- */
       const soundAudio = new Audio();
       soundAudio.loop = CONFIG.SOUND_LOOP !== false;
       soundAudio.preload = "auto";
@@ -567,8 +564,6 @@
         experienceStarted = true;
         introButton.disabled = true;
 
-        // Call play() directly inside the user's click handler, before the animation.
-        // This is the most reliable way to satisfy browsers' user-gesture audio policy.
         if (CONFIG.SOUND_URL) {
           soundAudio.muted = false;
           soundAudio.volume = Number(volumeSlider.value) / 100;
@@ -590,12 +585,10 @@
         }, 950);
       }
 
-      // Clicking the text or any part of the black screen enters the profile.
       introScreen.addEventListener("click", startExperience);
 
       volumeSlider.addEventListener("input", function () {
         syncVolumeControl();
-        // A fallback retry if the browser/device rejected playback on entry.
         if (experienceStarted && soundAudio.paused && CONFIG.SOUND_URL) {
           try {
             const playPromise = soundAudio.play();
@@ -636,7 +629,6 @@
         document.getElementById("description").textContent = CONFIG.DESCRIPTION;
 
       }
-      // Browser tab title animation: type the name, pause, erase, and repeat.
       const animatedTabTitle = "Cucumber";
       let tabTitleLength = 0;
       let tabTitleDeleting = false;

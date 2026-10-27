@@ -5,3 +5,9 @@
         <img src="https://lanyard.cnrad.dev/api/1499474505943486489" />
     </a>
 </div>
+
+## Привет, я Cucumber 👋
+
+I'm a **LuaU** developer who primarily creates Roblox scripts
+
+If you find any of my repositories useful or interesting, I'd greatly appreciate it if you left a **star**!
